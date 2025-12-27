@@ -4,370 +4,440 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI 塔羅占卜</title>
-    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
-    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://pyscript.net/releases/2024.1.1/core.css"
+    />
+    <script
+      type="module"
+      src="https://pyscript.net/releases/2024.1.1/core.js"
+    ></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Noto+Sans+TC&display=swap');
+      @import url("https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Noto+Sans+TC&display=swap");
 
-        :root {
-            --primary-bg: #1a1a2e;
-            --secondary-bg: #16213e;
-            --primary-accent: #e94560;
-            --secondary-accent: #fca311;
-            --text-color: #dcdcdc;
-            --gold-color: #ffd700;
-            --purple-glow: rgba(180, 50, 220, 0.7);
-        }
+      :root {
+        --primary-bg: #1a1a2e;
+        --secondary-bg: #16213e;
+        --primary-accent: #e94560;
+        --secondary-accent: #fca311;
+        --text-color: #dcdcdc;
+        --gold-color: #ffd700;
+        --purple-glow: rgba(180, 50, 220, 0.7);
+      }
 
-        body {
-            font-family: 'Noto Sans TC', sans-serif;
-            background-color: var(--primary-bg);
-            color: var(--text-color);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-        }
+      body {
+        font-family: "Noto Sans TC", sans-serif;
+        background-color: var(--primary-bg);
+        color: var(--text-color);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        margin: 0;
+      }
 
-        .container {
-            width: 90%;
-            max-width: 800px;
-            background-color: var(--secondary-bg);
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 0 30px var(--purple-glow);
-            border: 1px solid var(--gold-color);
-        }
+      .container {
+        width: 90%;
+        max-width: 800px;
+        background-color: var(--secondary-bg);
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 0 30px var(--purple-glow);
+        border: 1px solid var(--gold-color);
+      }
 
-        h1 {
-            font-family: 'Cinzel Decorative', cursive;
-            color: var(--gold-color);
-            text-align: center;
-            text-shadow: 0 0 10px var(--gold-color);
-            margin-bottom: 1rem;
-        }
+      h1 {
+        font-family: "Cinzel Decorative", cursive;
+        color: var(--gold-color);
+        text-align: center;
+        text-shadow: 0 0 10px var(--gold-color);
+        margin-bottom: 1rem;
+      }
 
-        .input-group {
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
+      .input-group {
+        margin-bottom: 1.5rem;
+        text-align: center;
+      }
 
-        .input-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
-        }
+      .input-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+      }
 
-        #question {
-            width: 80%;
-            padding: 0.8rem;
-            border-radius: 8px;
-            border: 1px solid var(--gold-color);
-            background-color: var(--primary-bg);
-            color: var(--text-color);
-            font-size: 1rem;
-        }
+      #question {
+        width: 80%;
+        padding: 0.8rem;
+        border-radius: 8px;
+        border: 1px solid var(--gold-color);
+        background-color: var(--primary-bg);
+        color: var(--text-color);
+        font-size: 1rem;
+      }
 
-        .ai-switch {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 1.5rem 0;
-            gap: 10px;
-        }
+      .ai-switch {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 1.5rem 0;
+        gap: 10px;
+      }
 
-        .ai-switch label {
-            cursor: pointer;
-            color: var(--gold-color);
-        }
+      .ai-switch label {
+        cursor: pointer;
+        color: var(--gold-color);
+      }
 
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 34px;
-        }
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+      }
 
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
 
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #4b4b4b;
-            transition: .4s;
-            border-radius: 34px;
-        }
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #4b4b4b;
+        transition: 0.4s;
+        border-radius: 34px;
+      }
 
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+      }
 
-        input:checked + .slider {
-            background-color: var(--primary-accent);
-        }
+      input:checked + .slider {
+        background-color: var(--primary-accent);
+      }
 
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
-        
-        #draw-button {
-            display: block;
-            margin: 0 auto;
-            padding: 0.8rem 2rem;
-            font-family: 'Cinzel Decorative', cursive;
-            font-size: 1.2rem;
-            color: var(--primary-bg);
-            background-color: var(--gold-color);
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-        }
+      input:checked + .slider:before {
+        transform: translateX(26px);
+      }
 
-        #draw-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
-        }
+      #draw-button {
+        display: block;
+        margin: 0 auto;
+        padding: 0.8rem 2rem;
+        font-family: "Cinzel Decorative", cursive;
+        font-size: 1.2rem;
+        color: var(--primary-bg);
+        background-color: var(--gold-color);
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+      }
 
-        .card-display {
-            display: flex;
-            justify-content: space-around;
-            margin: 2rem 0;
-            perspective: 1000px;
-        }
+      #draw-button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
+      }
 
-        .card-slot {
-            text-align: center;
-        }
-        
-        .card-slot h3 {
-            color: var(--secondary-accent);
-        }
+      .card-display {
+        display: flex;
+        justify-content: space-around;
+        margin: 2rem 0;
+        perspective: 1000px;
+      }
 
-        .card {
-            width: 120px;
-            height: 200px;
-            background-color: var(--primary-bg);
-            border: 2px solid var(--gold-color);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            transition: transform 0.8s;
-            transform-style: preserve-3d;
-            cursor: pointer;
-        }
-        
-        .card.flipped {
-            transform: rotateY(180deg);
-        }
+      .card-slot {
+        text-align: center;
+      }
 
-        .card-face {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 10px;
-            box-sizing: border-box;
-            border-radius: 10px;
-        }
-        
-        .card-front {
-            background: linear-gradient(45deg, var(--gold-color), var(--purple-glow));
-        }
+      .card-slot h3 {
+        color: var(--secondary-accent);
+      }
 
-        .card-back {
-            background-color: var(--primary-bg);
-            transform: rotateY(180deg);
-            font-size: 0.9em;
-            text-align: center;
-        }
+      .card {
+        width: 120px;
+        height: 200px;
+        background-color: var(--primary-bg);
+        border: 2px solid var(--gold-color);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        transition: transform 0.8s;
+        transform-style: preserve-3d;
+        cursor: pointer;
+      }
 
-        #result {
-            margin-top: 1.5rem;
-            padding: 1.5rem;
-            background-color: rgba(0,0,0,0.3);
-            border-radius: 10px;
-            border: 1px dashed var(--gold-color);
-            min-height: 100px;
-            white-space: pre-wrap;
-            line-height: 1.6;
-        }
+      .card.flipped {
+        transform: rotateY(180deg);
+      }
+
+      .card-face {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        box-sizing: border-box;
+        border-radius: 10px;
+      }
+
+      .card-front {
+        background: linear-gradient(
+          45deg,
+          var(--gold-color),
+          var(--purple-glow)
+        );
+      }
+
+      .card-back {
+        background-color: var(--primary-bg);
+        transform: rotateY(180deg);
+        font-size: 0.9em;
+        text-align: center;
+      }
+
+      #result {
+        margin-top: 1.5rem;
+        padding: 1.5rem;
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+        border: 1px dashed var(--gold-color);
+        min-height: 100px;
+        white-space: pre-wrap;
+        line-height: 1.6;
+      }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <div class="container">
-        <h1>塔羅低語</h1>
-        <div class="input-group">
-            <label for="question">輸入你的問題：</label>
-            <input type="text" id="question" name="question" placeholder="探索你的疑惑...">
-        </div>
+      <h1>塔羅低語</h1>
+      <div class="input-group">
+        <label for="question">輸入你的問題：</label>
+        <input
+          type="text"
+          id="question"
+          name="question"
+          placeholder="探索你的疑惑..."
+        />
+      </div>
 
-        <div class="ai-switch">
-            <span>基礎解讀</span>
-            <label class="switch">
-                <input type="checkbox" id="ai-toggle">
-                <span class="slider"></span>
-            </label>
-            <label for="ai-toggle">啟用 AI 深度解牌</label>
-        </div>
+      <div class="ai-switch">
+        <span>基礎解讀</span>
+        <label class="switch">
+          <input type="checkbox" id="ai-toggle" />
+          <span class="slider"></span>
+        </label>
+        <label for="ai-toggle"> 啟用 AI 深度解牌</label>
+      </div>
 
-        <button id="draw-button" py-click="draw_cards">抽牌</button>
+      <div
+        id="api-key-container"
+        style="display: none; text-align: center; margin-bottom: 1.5rem"
+      >
+        <label for="api-key" style="display: block; margin-bottom: 0.5rem"
+          >請輸入您的 Gemini API Key：</label
+        >
+        <input
+          type="password"
+          id="api-key"
+          name="api-key"
+          placeholder="在此貼上您的 API Key"
+          style="
+            width: 70%;
+            padding: 0.7rem;
+            border-radius: 8px;
+            border: 1px solid var(--gold-color);
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            font-size: 1rem;
+          "
+        />
+      </div>
 
-        <div class="card-display">
-            <div class="card-slot">
-                <h3>過去</h3>
-                <div id="card-past" class="card">
-                     <div class="card-face card-front"></div>
-                     <div class="card-face card-back"></div>
-                </div>
-            </div>
-            <div class="card-slot">
-                <h3>現在</h3>
-                <div id="card-present" class="card">
-                    <div class="card-face card-front"></div>
-                    <div class="card-face card-back"></div>
-                </div>
-            </div>
-            <div class="card-slot">
-                <h3>未來</h3>
-                <div id="card-future" class="card">
-                    <div class="card-face card-front"></div>
-                    <div class="card-face card-back"></div>
-                </div>
-            </div>
-        </div>
+      <button id="draw-button" py-click="draw_cards">抽牌</button>
 
-        <div id="result-container">
-            <h2>神諭</h2>
-            <div id="result">請先抽牌...</div>
+      <div class="card-display">
+        <div class="card-slot">
+          <h3>過去</h3>
+          <div id="card-past" class="card">
+            <div class="card-face card-front"></div>
+            <div class="card-face card-back"></div>
+          </div>
         </div>
+        <div class="card-slot">
+          <h3>現在</h3>
+          <div id="card-present" class="card">
+            <div class="card-face card-front"></div>
+            <div class="card-face card-back"></div>
+          </div>
+        </div>
+        <div class="card-slot">
+          <h3>未來</h3>
+          <div id="card-future" class="card">
+            <div class="card-face card-front"></div>
+            <div class="card-face card-back"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="result-container">
+        <h2>神諭</h2>
+        <div id="result">請先抽牌...</div>
+      </div>
     </div>
 
     <py-script>
-        import random
-        from pyscript import document
+      import random
+      import json
+      import asyncio
+      from pyscript import document
+      from pyodide.http import pyfetch
 
-        # 22 張大阿爾克那牌
-        MAJOR_ARCANA = {
-            "愚者": {"keyword": ["開始", "天真", "自由", "潛力無限"]},
-            "魔術師": {"keyword": ["創造", "意志", "顯化", "資源"]},
-            "女祭司": {"keyword": ["直覺", "神秘", "潛意識", "智慧"]},
-            "皇后": {"keyword": ["豐盛", "母性", "感官", "自然"]},
-            "皇帝": {"keyword": ["權威", "結構", "父親", "控制"]},
-            "教皇": {"keyword": ["傳統", "信仰", "團體", "教導"]},
-            "戀人": {"keyword": ["選擇", "關係", "結合", "價值觀"]},
-            "戰車": {"keyword": ["勝利", "意志力", "行動", "征服"]},
-            "力量": {"keyword": ["勇氣", "內在力量", "溫柔", "克服"]},
-            "隱者": {"keyword": ["內省", "引導", "孤獨", "尋找真理"]},
-            "命運之輪": {"keyword": ["改變", "循環", "轉捩點", "運氣"]},
-            "正義": {"keyword": ["公平", "因果", "真理", "法律"]},
-            "吊人": {"keyword": ["犧牲", "新視角", "等待", "順應"]},
-            "死神": {"keyword": ["結束", "轉變", "放下", "重生"]},
-            "節制": {"keyword": ["平衡", "和諧", "耐心", "整合"]},
-            "惡魔": {"keyword": ["束縛", "誘惑", "物質主義", "成癮"]},
-            "高塔": {"keyword": ["突變", "毀滅", "啟示", "釋放"]},
-            "星星": {"keyword": ["希望", "靈感", "平靜", "治癒"]},
-            "月亮": {"keyword": ["幻象", "恐懼", "潛意識", "不安"]},
-            "太陽": {"keyword": ["喜悅", "成功", "清晰", "活力"]},
-            "審判": {"keyword": ["覺醒", "清算", "重生", "內在召喚"]},
-            "世界": {"keyword": ["完成", "整合", "成就", "圓滿"]},
-        }
+      # 22 張大阿爾克那牌
+      MAJOR_ARCANA = {
+          "愚者": {"keyword": ["開始", "天真", "自由", "潛力無限"]},
+          "魔術師": {"keyword": ["創造", "意志", "顯化", "資源"]},
+          "女祭司": {"keyword": ["直覺", "神秘", "潛意識", "智慧"]},
+          "皇后": {"keyword": ["豐盛", "母性", "感官", "自然"]},
+          "皇帝": {"keyword": ["權威", "結構", "父親", "控制"]},
+          "教皇": {"keyword": ["傳統", "信仰", "團體", "教導"]},
+          "戀人": {"keyword": ["選擇", "關係", "結合", "價值觀"]},
+          "戰車": {"keyword": ["勝利", "意志力", "行動", "征服"]},
+          "力量": {"keyword": ["勇氣", "內在力量", "溫柔", "克服"]},
+          "隱者": {"keyword": ["內省", "引導", "孤獨", "尋找真理"]},
+          "命運之輪": {"keyword": ["改變", "循環", "轉捩點", "運氣"]},
+          "正義": {"keyword": ["公平", "因果", "真理", "法律"]},
+          "吊人": {"keyword": ["犧牲", "新視角", "等待", "順應"]},
+          "死神": {"keyword": ["結束", "轉變", "放下", "重生"]},
+          "節制": {"keyword": ["平衡", "和諧", "耐心", "整合"]},
+          "惡魔": {"keyword": ["束縛", "誘惑", "物質主義", "成癮"]},
+          "高塔": {"keyword": ["突變", "毀滅", "啟示", "釋放"]},
+          "星星": {"keyword": ["希望", "靈感", "平靜", "治癒"]},
+          "月亮": {"keyword": ["幻象", "恐懼", "潛意識", "不安"]},
+          "太陽": {"keyword": ["喜悅", "成功", "清晰", "活力"]},
+          "審判": {"keyword": ["覺醒", "清算", "重生", "內在召喚"]},
+          "世界": {"keyword": ["完成", "整合", "成就", "圓滿"]},
+      }
 
-        card_names = list(MAJOR_ARCANA.keys())
-        
-        result_div = document.getElementById("result")
-        ai_toggle = document.getElementById("ai-toggle")
-        
-        card_elements = {
-            "past": document.querySelector("#card-past .card-back"),
-            "present": document.querySelector("#card-present .card-back"),
-            "future": document.querySelector("#card-future .card-back"),
-        }
-        
-        card_containers = {
-            "past": document.getElementById("card-past"),
-            "present": document.getElementById("card-present"),
-            "future": document.getElementById("card-future"),
-        }
+      card_names = list(MAJOR_ARCANA.keys())
+      
+      result_div = document.getElementById("result")
+      ai_toggle = document.getElementById("ai-toggle")
+      
+      card_elements = {
+          "past": document.querySelector("#card-past .card-back"),
+          "present": document.querySelector("#card-present .card-back"),
+          "future": document.querySelector("#card-future .card-back"),
+      }
+      
+      card_containers = {
+          "past": document.getElementById("card-past"),
+          "present": document.getElementById("card-present"),
+          "future": document.getElementById("card-future"),
+      }
 
-        def draw_cards(event):
-            # 1. 清空上次結果並重置卡牌視覺
-            for slot in ["past", "present", "future"]:
-                card_containers[slot].classList.remove("flipped")
-                card_elements[slot].innerHTML = ""
-            result_div.innerText = "神諭正在顯現..."
+      async def draw_cards(event):
+          # 1. 清空上次結果並重置卡牌視覺
+          for slot in ["past", "present", "future"]:
+              card_containers[slot].classList.remove("flipped")
+              card_elements[slot].innerHTML = ""
+          result_div.innerText = "神諭正在顯現..."
 
-            # 2. 隨機抽取三張不重複的牌
-            drawn_cards = random.sample(card_names, 3)
-            
-            # 3. 為每張牌決定正逆位並儲存
-            reading_data = {}
-            positions = ["past", "present", "future"]
-            for i in range(3):
-                card_name = drawn_cards[i]
-                orientation = "正位" if random.random() > 0.5 else "逆位"
-                reading_data[positions[i]] = {"name": card_name, "orientation": orientation}
+          # 2. 隨機抽取三張不重複的牌
+          drawn_cards = random.sample(card_names, 3)
+          
+          # 3. 為每張牌決定正逆位並儲存
+          reading_data = {}
+          positions = ["past", "present", "future"]
+          for i in range(3):
+              card_name = drawn_cards[i]
+              orientation = "正位" if random.random() > 0.5 else "逆位"
+              reading_data[positions[i]] = {"name": card_name, "orientation": orientation}
 
-            # 4. 根據AI開關決定解牌模式
-            use_ai = ai_toggle.checked
-            
-            if use_ai:
-                # 這裡未來將串接 Gemini API
-                # 為了演示，我們僅顯示準備發送的資料
-                question = document.getElementById("question").value
-                prompt_to_ai = f"問題: {question}\n"
-                prompt_to_ai += f"過去: {reading_data['past']['name']} ({reading_data['past']['orientation']})\n"
-                prompt_to_ai += f"現在: {reading_data['present']['name']} ({reading_data['present']['orientation']})\n"
-                prompt_to_ai += f"未來: {reading_data['future']['name']} ({reading_data['future']['orientation']})\n"
-                prompt_to_ai += "請以塔羅大師的口吻，整合解讀三張牌的關聯性，並在200字內提供指引。"
+          # 4. 根據AI開關決定解牌模式
+          use_ai = ai_toggle.checked
+          
+          if use_ai:
+              api_key = document.getElementById("api-key").value
+              if not api_key:
+                  result_div.innerText = "錯誤：請先在上方欄位輸入您的 Gemini API Key."
+                  return
 
-                result_div.innerText = f"【AI 深度解讀模式】\n正在呼叫 Gemini...\n\n傳送的資訊：\n{prompt_to_ai}"
-                # 在實際應用中，你會在這裡發送 API 請求
-                # response = await call_gemini_api(prompt_to_ai)
-                # result_div.innerText = response
-            else:
-                # 預設的本地關鍵字解讀
-                interpretation = "【基礎解讀】\n"
-                for pos, data in reading_data.items():
-                    card_info = MAJOR_ARCANA[data["name"]]
-                    keyword = random.choice(card_info["keyword"])
-                    pos_text = {"past": "過去", "present": "現在", "future": "未來"}[pos]
-                    interpretation += f"{pos_text} ({data['orientation']}) 的啟示是關於「{keyword}」。\n"
-                
-                interpretation += "\n請自行體會其中的關聯與奧秘。"
-                result_div.innerText = interpretation
+              question = document.getElementById("question").value
+              prompt_text = f"你是一位神秘的塔羅牌大師。請根據以下資訊，用繁體中文為使用者提供一段綜合性的解讀，內容需包含對過去、現在與未來的洞察，並將三張牌的意義串連起來，最後給予使用者一個明確的指引。請將總字數控制在\n      250 字以內。\n\n- 使用者的問題: {question}\n- 過去: {reading_data['past']['name']} ({reading_data['past']['orientation']})\n- 現在: {reading_data['present']['name']} ({reading_data['present']['orientation']})\n- 未來: {reading_data['future']['name']} ({reading_data['future']['orientation']})"
 
-            # 5. 更新卡牌UI並觸發翻牌效果
-            for slot, data in reading_data.items():
-                card_elements[slot].innerHTML = f"{data['name']}<br>({data['orientation']})"
-                card_containers[slot].classList.add("flipped")
+              api_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={api_key}"
+              
+              request_body = {
+                  "contents": [{"parts": [{"text": prompt_text}]}]}
 
+              try:
+                  result_div.innerText = "【AI 深度解讀模式】\n正在連結宇宙的智慧，請稍候..."
+                  response = await pyfetch(
+                      url=api_url,
+                      method="POST",
+                      headers={"Content-Type": "application/json"},
+                      body=json.dumps(request_body)
+                  )
+
+                  if response.ok:
+                      data = await response.json()
+                      try:
+                          ai_text = data['candidates'][0]['content']['parts'][0]['text']
+                          result_div.innerText = ai_text
+                      except (KeyError, IndexError):
+                          result_div.innerText = f"錯誤：無法從 API 回應中解析解讀結果。\n回應內容：\n{await response.string()}"
+                  else:
+                      error_data = await response.json()
+                      error_message = error_data.get('error', {}).get('message', '不明的 API 錯誤')
+                      result_div.innerText = f"錯誤：API 請求失敗 (狀態碼: {response.status})。\n原因：{error_message}"
+
+              except Exception as e:
+                  result_div.innerText = f"發生預期外的錯誤：\n{str(e)}"
+          else:
+              # 預設的本地關鍵字解讀
+              interpretation = "【基礎解讀】\n"
+              for pos, data in reading_data.items():
+                  card_info = MAJOR_ARCANA[data["name"]]
+                  keyword = random.choice(card_info["keyword"])
+                  pos_text = {"past": "過去", "present": "現在", "future": "未來"}[pos]
+                  interpretation += f"{pos_text} ({data['name']} {data['orientation']}) 的啟示是關於「{keyword}」。\n"
+              
+              interpretation += "\n請自行體會其中的關聯與奧秘。"
+              result_div.innerText = interpretation
+
+          # 5. 更新卡牌UI並觸發翻牌效果
+          for slot, data in reading_data.items():
+              card_elements[slot].innerHTML = f"{data['name']}<br>({data['orientation']})"
+              card_containers[slot].classList.add("flipped")
     </py-script>
+    <script>
+        const aiToggle = document.getElementById('ai-toggle');
+        const apiKeyContainer = document.getElementById('api-key-container');
+        aiToggle.addEventListener('change', () => {
+            apiKeyContainer.style.display = aiToggle.checked ? 'block' : 'none';
+        });
+    </script>
 </body>
 </html>
